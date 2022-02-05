@@ -1,3 +1,7 @@
+.hide {
+    display: none;
+}
+
 button {
     border: 0;
     cursor: pointer;
@@ -34,27 +38,27 @@ section + section {
     font-weight: bold;
 }
 
-#user-table {
+table {
     width: 500px;
 }
 
-#user-table tbody td {
+table tbody td {
     padding: 5px 10px;
 }
 
-#user-table tbody td:first-child {
+table tbody td:first-child {
     width: 100px;
     text-align: center;
 }
 
-#user-table tbody td:last-child {
+table tbody td:last-child {
     text-align: right;
 }
 
-#user-table tbody tr:nth-child(odd) {
+table tbody tr:nth-child(odd) {
     background: rgba(0, 0, 0, 10%);
 }
 
-#user-table tbody tr.selected {
+table tbody tr.selected {
     background: rgba(255, 0, 0, 10%);
 }

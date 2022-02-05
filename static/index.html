@@ -38,12 +38,73 @@
         </tbody>
       </table>
     </section>
+
+    <section id="user-info" class="hide">
+      <h1><span id="user-info-name"></span>의 정보</h1>
+
+      <div>
+        <strong>현재 포인트:</strong>
+        <span id="user-info-point"></span>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>포인트</th>
+            <th>소멸여부</th>
+            <th>시점</th>
+          </tr>
+        </thead>
+        <tbody id="user-info-point-table-body">
+        </tbody>
+      </table>
+    </section>
   </main>
 
   <script>
     let selectedUser = null;
 
     getUsers();
+
+    function renderUserInfo(data) {
+      const dom = {
+        section: document.getElementById('user-info'),
+        name: document.getElementById('user-info-name'),
+        point: document.getElementById('user-info-point'),
+        tableBody: document.getElementById('user-info-point-table-body'),
+      };
+
+      dom.section.classList.remove('hide');
+      dom.name.innerText = data.name;
+      dom.point.innerText = data.point;
+
+      dom.tableBody.innerHTML = '';
+
+      for (const log of data.pointLogs) {
+        const element = document.createElement('tr');
+
+        element.innerHTML = `
+          <td>${log.point}</td>
+          <td>${log.isExpired}</td>
+          <td>${new Date(log.createdAt).toLocaleString()}</td>
+        `;
+
+        dom.tableBody.appendChild(element);
+      }
+    }
+
+    function getUserInfo(id) {
+      fetch(`/user/${id}`)
+        .then((res) => res.json())
+        .then(renderUserInfo);
+    }
+
+    function selectUser(id) {
+
+
+      selectedUser = id;
+      getUserInfo(id);
+    }
 
     function createUser(e) {
       e.preventDefault();
@@ -58,10 +119,10 @@
     function getUsers() {
       fetch('/user')
         .then((res) => res.json())
-        .then(rerenderUserTable);
+        .then(renderUserTable);
     }
 
-    function rerenderUserTable(data) {
+    function renderUserTable(data) {
       const tablebody = document.getElementById('user-table-body');
 
       tablebody.innerHTML = '';
@@ -84,7 +145,7 @@
       element.onclick = () => {
         parent.querySelector('.selected')?.classList.remove('selected');
         element.classList.add('selected');
-        selectedUser = data.id;
+        selectUser(data.id);
       }
 
       parent.appendChild(element);
