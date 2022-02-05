@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -13,6 +14,7 @@ export class UserPointLog {
   id: number;
 
   @Column()
+  @RelationId((userPointLog: UserPointLog) => userPointLog.user)
   userId: number;
 
   @Column({ default: 0 })

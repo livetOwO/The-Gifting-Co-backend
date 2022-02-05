@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserPointDto } from './dto/update-user-point.dto';
 
 @Controller('user')
 export class UserController {
@@ -19,5 +20,10 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
+  }
+
+  @Post('update/point')
+  updatePoint(@Body() updateUserPointDto: UpdateUserPointDto) {
+    return this.userService.updateUserPoint(updateUserPointDto);
   }
 }

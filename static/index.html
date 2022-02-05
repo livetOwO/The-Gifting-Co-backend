@@ -47,10 +47,23 @@
         <span id="user-info-point"></span>
       </div>
 
+      <form action="/user/update/point" method="post" id="user-update-point-form">
+        <div class="input-row">
+          <label><strong>포인트</strong><input type="number" name="point" min="0" value="0"></label>
+        </div>
+        <div class="input-row">
+          <label><strong>사유</strong><input type="text" name="comment"></label>
+        </div>
+
+        <button type="button" onclick="updateUserPoint('positive')">부여</button>
+        <button type="button" onclick="updateUserPoint('negative')">차감</button>
+      </form>
+
       <table>
         <thead>
           <tr>
             <th>포인트</th>
+            <th>사유</th>
             <th>소멸여부</th>
             <th>시점</th>
           </tr>
@@ -66,13 +79,34 @@
 
     getUsers();
 
+    function updateUserPoint(type) {
+      const form = document.getElementById('user-update-point-form');
+      const data = {
+        userId: selectedUser,
+        point: type === 'positive' ? +form.point.value : -form.point.value,
+        comment: form.comment.value,
+      };
+
+      fetch('/user/update/point', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(() => getUserInfo(selectedUser))
+    }
+
     function renderUserInfo(data) {
       const dom = {
         section: document.getElementById('user-info'),
         name: document.getElementById('user-info-name'),
         point: document.getElementById('user-info-point'),
         tableBody: document.getElementById('user-info-point-table-body'),
+        userRow: document.getElementById('user-table-body')?.querySelector(`[data-id="${selectedUser}"]`),
       };
+
+      dom.userRow.lastElementChild.innerText = data.point;
 
       dom.section.classList.remove('hide');
       dom.name.innerText = data.name;
@@ -85,6 +119,7 @@
 
         element.innerHTML = `
           <td>${log.point}</td>
+          <td>${log.comment}</td>
           <td>${log.isExpired}</td>
           <td>${new Date(log.createdAt).toLocaleString()}</td>
         `;
@@ -100,8 +135,6 @@
     }
 
     function selectUser(id) {
-
-
       selectedUser = id;
       getUserInfo(id);
     }
@@ -135,6 +168,8 @@
     function appendUserTableRow(data) {
       const parent = document.getElementById('user-table-body');
       const element = document.createElement('tr');
+
+      element.dataset.id = data.id;
 
       element.innerHTML = `
         <td>${data.id}</td>
