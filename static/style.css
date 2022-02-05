@@ -63,6 +63,10 @@ table tbody tr:nth-child(odd) {
     background: rgba(0, 0, 0, 10%);
 }
 
-table tbody tr.selected {
+#user-table tbody tr {
+    cursor: pointer;
+}
+
+#user-table tbody tr.selected {
     background: rgba(255, 0, 0, 10%);
 }
