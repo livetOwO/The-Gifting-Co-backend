@@ -1,0 +1,60 @@
+button {
+    border: 0;
+    cursor: pointer;
+}
+
+.container {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+section {
+    margin-top: 50px;
+}
+
+section + section {
+    padding-top: 50px;
+    border-top: 1px solid #CCCCCC;
+}
+
+#user-create .input-row {
+    margin-top: 10px;
+}
+
+#user-create label strong {
+    display: inline-block;
+    width: 100px;
+}
+
+#user-create button {
+    margin-top: 20px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    background: lightblue;
+    font-weight: bold;
+}
+
+#user-table {
+    width: 500px;
+}
+
+#user-table tbody td {
+    padding: 5px 10px;
+}
+
+#user-table tbody td:first-child {
+    width: 100px;
+    text-align: center;
+}
+
+#user-table tbody td:last-child {
+    text-align: right;
+}
+
+#user-table tbody tr:nth-child(odd) {
+    background: rgba(0, 0, 0, 10%);
+}
+
+#user-table tbody tr.selected {
+    background: rgba(255, 0, 0, 10%);
+}
