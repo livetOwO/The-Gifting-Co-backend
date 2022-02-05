@@ -10,30 +10,78 @@
 <body>
   <section>
     <h1>고객 생성</h1>
-    <form action="/user/create" method="post">
+    <form action="/user/create" method="post" onsubmit="createUser(event)">
       <label><strong>고객명</strong> <input type="text" name="name"></label>
-      <label><strong>초기포인트</strong> <input type="number" name="point" min="0"></label>
+      <label><strong>초기포인트</strong> <input type="number" name="point" min="0" value="0"></label>
       <button>생성하기</button>
     </form>
   </section>
+
   <section>
     <h1>고객 목록</h1>
     <table>
       <thead>
         <tr>
+          <th>고유번호</th>
           <th>고객명</th>
           <th>포인트</th>
-          <th>-</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
+      <tbody id="user-table-body">
+
       </tbody>
     </table>
   </section>
+
+  <script>
+    let selectedUser = null;
+
+    getUsers();
+
+    function createUser(e) {
+      e.preventDefault();
+
+      fetch('/user/create', {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(e.target)),
+      })
+        .then(getUsers);
+    }
+
+    function getUsers() {
+      fetch('/user')
+        .then((res) => res.json())
+        .then(rerenderUserTable);
+    }
+
+    function rerenderUserTable(data) {
+      const tablebody = document.getElementById('user-table-body');
+
+      tablebody.innerHTML = '';
+
+      for (const user of data) {
+        appendUserTableRow(user);
+      }
+    }
+
+    function appendUserTableRow(data) {
+      const parent = document.getElementById('user-table-body');
+      const element = document.createElement('tr');
+
+      element.innerHTML = `
+        <td>${data.id}</td>
+        <td>${data.name}</td>
+        <td>${data.point}</td>
+      `;
+
+      element.onclick = () => {
+        parent.querySelector('.selected')?.classList.remove('selected');
+        element.classList.add('selected');
+        selectedUser = data.id;
+      }
+
+      parent.appendChild(element);
+    }
+  </script>
 </body>
 </html>
